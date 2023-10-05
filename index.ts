@@ -1,18 +1,41 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-require('dotenv').config();
- 
+import { MONGO_URL, PORT } from "./config/config";
+import mongoose from "mongoose";
+import router from "./modules";
+import cors from "cors"
+
+
 export const app = express();
+
 // parsing the request data
 app.use(express.json());
-const port = process.env.PORT || 3000;
-// console.log("port--", port, typeof port);
- 
-app.listen(port, () => {
-  console.log("Server is running on port",port);
+app.use(cors());
+
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
-// routers
+
+// dataBase connection
+mongoose.set('strictQuery', false);
+mongoose.connect(MONGO_URL).then(()=>{
+  console.log("\n*************MONGODB connected**************\n");
+}).catch(error =>{
+  console.log("unable to connect with database:", error);
+});
+ 
+// App testing
+app.get('/ping', (req,res)=>{
+  res.status(200).json({
+      status: true,
+      message : "App is working",
+  })
+});
+
+// router 
+app.use("/api", router)
 
 //simple get api for user
 const users : any = [];

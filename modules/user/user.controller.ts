@@ -1,6 +1,8 @@
 // import { app } from "../..";
 // import bcrypt from "bcryptjs";
 
+import Users from "../../models/user";
+
 // //simple get api for user
 // const users : any = [];
 
@@ -33,9 +35,29 @@
 
 class userController {
 
-  async signUp(request : Request, response: Response){
-    
+  static async register(request : any, response: any){
+    const user = request.body;
+    const newUser = new Users(user);
+    const userExist = await Users.exists({firstName : user.firstName});
+
+    if(!userExist){
+      await newUser.save();
+        response.status(200).json({
+          success : true,
+          message : "user created successfully!",
+          data : newUser,
+      })
+    }else{
+      response.status(400).json({
+        success : false,
+        message : "User already exist",
+        data : {},
+      })
+    }
   }
+
+
+
 
 }
 export default userController;
