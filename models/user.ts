@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import validator from "validator";
+import isEmail from "validator/lib/isEmail";
 
 // Define the User schema
 const userSchema = new mongoose.Schema({
@@ -16,10 +16,12 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        validate:{
-            validator:validator.isEmail,
-            message:"Please provide a valid email"
-        }
+        validate: {
+            validator: function(v: string) {
+              return isEmail(v);
+            },
+            message: (props: { value: any; }) => `${props.value} is not a valid email address!`
+          }
     },
     phone:{
         type: Number,
@@ -30,6 +32,11 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    isDeleted:{
+        type:Boolean,
+        required:true,
+        default:false,
+     },
 });
 // Create the User model
  const Users = mongoose.model("Users", userSchema);
