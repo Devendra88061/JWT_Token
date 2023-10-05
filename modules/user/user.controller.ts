@@ -14,7 +14,7 @@ import Users from "../../models/user";
 // //Simple post api for user
 // app.post("/api/register", async (request, response) => {
 //     const user = request.body;
-    
+
 //     if (!user.email || !user.password) {
 //       response.status(400).json({
 //        success : false,
@@ -35,29 +35,33 @@ import Users from "../../models/user";
 
 class userController {
 
-  static async register(request : any, response: any){
+  static async register(request: any, response: any) {
     const user = request.body;
     const newUser = new Users(user);
-    const userExist = await Users.exists({firstName : user.firstName});
-
-    if(!userExist){
-      await newUser.save();
+    const userExist = await Users.exists({ email: user.email });
+    try {
+      if (!userExist) {
+        await newUser.save();
         response.status(200).json({
-          success : true,
-          message : "user created successfully!",
-          data : newUser,
-      })
-    }else{
-      response.status(400).json({
-        success : false,
-        message : "User already exist",
-        data : {},
-      })
+          success: true,
+          message: "user created successfully!",
+          data: newUser,
+        })
+      } else {
+        response.status(400).json({
+          success: false,
+          message: "User already exist",
+          data: {},
+        })
+      }
+    } catch (err) {
+      response.status(500).json({
+        message : err,
+      });
+
+
     }
   }
-
-
-
 
 }
 export default userController;
