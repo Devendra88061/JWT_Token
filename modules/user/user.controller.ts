@@ -1,6 +1,5 @@
 // import { app } from "../..";
 // import bcrypt from "bcryptjs";
-
 import Users from "../../models/user";
 
 // //simple get api for user
