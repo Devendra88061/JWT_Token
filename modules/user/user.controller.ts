@@ -1,6 +1,6 @@
 // import { app } from "../..";
 // import bcrypt from "bcryptjs";
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import Users from "../../models/user";
 import userService from "./user.service";
 import HttpException from "../../common/db/http.Exception/http.Exception";

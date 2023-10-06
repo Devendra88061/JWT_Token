@@ -6,7 +6,6 @@ class userService {
     public static async signUp(user: any, next: CallableFunction) {
         try {
             let userData = await new CrudOperations(Users).getDocument({ email: user.email }, {});
-           
             if (userData) {
                 return next(null, "user Already Exists..")
             }
@@ -16,8 +15,8 @@ class userService {
             try {
                 const result = await new CrudOperations(Users).save(newUsers)
                 const user = result.toObject();
-                delete user?.password;
-                delete user.__v;
+                // delete user?.password;
+                // delete user.__v;
                 return next(null, result);
             }
             catch (err: any) {
