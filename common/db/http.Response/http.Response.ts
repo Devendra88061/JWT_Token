@@ -14,6 +14,5 @@ class HttpResponse {
         this.pageNo = pageNo;
         this.message = message;
     }
-
 }
 export default HttpResponse;

@@ -6,24 +6,24 @@ const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
         required: true,
-        unique: true
+        unique: false,
     },
     lastName: {
         type: String,
         required: true,
-        unique: true
+        unique: false,
     },
     email: {
         type: String,
         required: true,
         validate: {
-            validator: function(v: string) {
-              return isEmail(v);
+            validator: function (v: string) {
+                return isEmail(v);
             },
             message: (props: { value: any; }) => `${props.value} is not a valid email address!`
-          }
+        }
     },
-    phone:{
+    phone: {
         type: Number,
         required: true,
         unique: true
@@ -32,12 +32,20 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    isDeleted:{
-        type:Boolean,
-        required:true,
-        default:false,
-     },
+    profilePicture: {
+        type: String,
+        required: false
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 });
 // Create the User model
- const Users = mongoose.model("Users", userSchema);
- export default Users;
+const Users = mongoose.model("Users", userSchema);
+export default Users;
