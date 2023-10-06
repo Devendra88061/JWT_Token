@@ -3,7 +3,7 @@ import userController from "./user.controller";
 
 const userRouter = Router();
 
-userRouter.post("/add", userController.register);
+userRouter.post("/signUp", userController.signUp);
 
 
 export default userRouter;

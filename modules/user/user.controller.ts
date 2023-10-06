@@ -1,6 +1,11 @@
 // import { app } from "../..";
 // import bcrypt from "bcryptjs";
+import { NextFunction } from "express";
 import Users from "../../models/user";
+import userService from "./user.service";
+import HttpException from "../../common/db/http.Exception/http.Exception";
+import HttpResponse from "../../common/db/http.Responce/http.Responce";
+
 
 // //simple get api for user
 // const users : any = [];
@@ -34,31 +39,20 @@ import Users from "../../models/user";
 
 class userController {
 
-  static async register(request: any, response: any) {
-    const user = request.body;
-    const newUser = new Users(user);
-    const userExist = await Users.exists({ email: user.email });
+  static async signUp(request: Request, response: Response, next: NextFunction) {
     try {
-      if (!userExist) {
-        await newUser.save();
-        response.status(200).json({
-          success: true,
-          message: "user created successfully!",
-          data: newUser,
-        })
-      } else {
-        response.status(400).json({
-          success: false,
-          message: "User already exist",
-          data: {},
-        })
-      }
-    } catch (err) {
-      response.status(500).json({
-        message : err,
+      const user = request.body;
+      userService.signUp(user, (err: any, result: any) => {
+        if (err) {
+          next(new HttpException(400, err));
+        } else {
+          response.status(200).send(new HttpResponse("SignedUp successfully!", result, "Signed Up successfully.", null, null, null));
+        }
       });
-
-
+      next();
+    }
+    catch (err) {
+      next(new HttpException(400, "Something went wrong"));
     }
   }
 
