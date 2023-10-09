@@ -3,6 +3,7 @@ import Users from "../../models/user";
 import bcrypt from "bcrypt"
 import { JWT_SECRET } from "../../config/config";
 import jwt from "jsonwebtoken";
+import sendVerificationEmail from "../../common/db/emailVerificationLink/verifyEmail";
 
 class userService {
 
@@ -19,9 +20,10 @@ class userService {
             try {
                 const result = await new CrudOperations(Users).save(newUsers)
                 const user = result.toObject();
-                // delete user?.password;
-                // delete user.__v;
-                return next(null, result);
+                const token = jwt.sign(userData.email, JWT_SECRET);
+                user.token = token;
+                sendVerificationEmail(user.email, token);
+                return next(null, user);
             }
             catch (err: any) {
                 return next(err, "Something went wrong!");
@@ -39,7 +41,6 @@ class userService {
             if (!userData) {
                 return next(null, "You are not register user please signUp now");
             }
-            console.log("User Data", userData[0]);
             const passwordMatch = await bcrypt.compare(password, userData.password);
             if (passwordMatch) {
                 // To convert mongoose doc into plain object
@@ -56,7 +57,24 @@ class userService {
     }
 
 
-    public static async getUsers(next: CallableFunction) {
+    public static async getAllUsers(next: CallableFunction) {
+        try {
+            const count = await new CrudOperations(Users).countAllDocuments({});
+            const result = await new CrudOperations(Users).getAllDocuments({}, {}, { limit: 0, pageNo: 0 },{});
+            
+            const finalResult = {
+                finalCount: count,
+                Result: result
+            }
+            next(null, finalResult);
+
+        } catch (err: any) {
+            return next(err, "Something went wrong!");
+        }
+    }
+
+    // send email verification link
+    public static async verifyEmail(next: CallableFunction) {
         try {
             const count = await new CrudOperations(Users).countAllDocuments({});
             const result = await new CrudOperations(Users).getAllDocuments({}, {}, { limit: 0, pageNo: 0 },{});

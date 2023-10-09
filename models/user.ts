@@ -42,7 +42,10 @@ const userSchema = new mongoose.Schema({
     },
     isDeleted: {
         type: Boolean,
-        required: true,
+        default: false,
+    },
+    isEmailVerified: {
+        type: Boolean,
         default: false,
     },
 });

@@ -37,9 +37,25 @@ class userController {
     }
   }
 
-  static async getUsers(request: Request, response: Response, next: NextFunction) {
+  static async getAllUsers(request: Request, response: Response, next: NextFunction) {
     try {
-      userService.getUsers((err: any, result: any) => {
+      userService.getAllUsers((err: any, result: any) => {
+        if (err) {
+          next(new HttpException(400, err));
+        } else {
+          response.status(200).send(new HttpResponse(null, result, "Get All Users", null, null, null));
+        }
+      });
+    }
+    catch (err) {
+      next(new HttpException(400, "Something went wrong"));
+    }
+  }
+
+  // send verification link for email
+  static async verifyEmail(request: Request, response: Response, next: NextFunction) {
+    try {
+      userService.verifyEmail((err: any, result: any) => {
         if (err) {
           next(new HttpException(400, err));
         } else {

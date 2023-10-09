@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../../../config/config";
 class jwtToken {
-    public async verifyJwt(request: any, response: any, next: CallableFunction) {
+    public static async verifyJwt(request: any, response: any, next: CallableFunction) {
         //  const bearerHeader = request.headers['authorization'];
         //  console.log("bearerHeader---", bearerHeader);
         //  if(!bearerHeader){
