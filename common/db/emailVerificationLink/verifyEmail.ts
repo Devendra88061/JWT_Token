@@ -1,29 +1,32 @@
 import nodemailer from "nodemailer";
+import { APP_PASSWORD, FROM_MAIL } from "../../../config/config";
 
+// transporter for nodemailer
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: "devendra.patil@virtoustack.com",
-      pass: "Devendr@0077",
+      user: FROM_MAIL,
+      pass: APP_PASSWORD,
     }
   });
 
 
+// function for send mail using nodemailer
 const sendVerificationEmail = (email:any, token: any) => {
-    const verificationLink = `http://transportManagement.com/verify?token=${token}`;
+    const verificationLink = `http://TransportManagement_verify?token=${token}`;
   
     const mailOptions = {
-      from: "devendra.patil@virtoustack.com",
+      from: FROM_MAIL,
       to: email,
       subject: 'Email Verification',
       html: `Click <a href="${verificationLink}">here</a> to verify your email.`
     };
   
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error) => {
       if (error) {
         console.error("Error in send Email:", error);
       } else {
-        console.log('Email sent: ' + info.response);
+        console.log("Email sent");
       }
     });
   };

@@ -1,72 +1,63 @@
 import { NextFunction, Request, Response } from "express";
-import userService from "./user.service";
 import HttpException from "../../common/db/http.Exception/http.Exception";
 import HttpResponse from "../../common/db/http.Response/http.Response";
+import userService from "./user.service";
 
-class userController {
 
-  static async signUp(request: Request, response: Response, next: NextFunction) {
-    try {
-      const user = request.body;
-      userService.signUp(user, (err: any, result: any) => {
-        if (err) {
-          next(new HttpException(400, err));
-        } else {
-          response.status(200).send(new HttpResponse(null, result, "Signed Up", null, null, null));
+
+class userController{
+
+    // Get All users
+    public static async getAllUsers(request: Request, response: Response, next: NextFunction) {
+        try {
+          userService.getAllUser((err: any, result: any) => {
+            if (err) {
+              next(new HttpException(400, err));
+            } else {
+              response.status(200).send(new HttpResponse(null, result, "Get All Users", null, null, null));
+            }
+          });
         }
-      });
-    }
-    catch (err) {
-      next(new HttpException(400, "Something went wrong"));
-    }
-  }
-
-  static async signIn(request: Request, response: Response, next: NextFunction) {
-    try {
-      const {email, password} = request.body;
-      userService.signIn(email, password, (err: any, result: any) => {
-        if (err) {
-          next(new HttpException(400, err));
-        } else {
-          response.status(200).send(new HttpResponse(null, result, "Signed In", null, null, null));
+        catch (err) {
+          next(new HttpException(400, "Something went wrong"));
         }
-      });
-    }
-    catch (err) {
-      next(new HttpException(400, "Something went wrong"));
-    }
-  }
+      }
 
-  static async getAllUsers(request: Request, response: Response, next: NextFunction) {
-    try {
-      userService.getAllUsers((err: any, result: any) => {
-        if (err) {
-          next(new HttpException(400, err));
-        } else {
-          response.status(200).send(new HttpResponse(null, result, "Get All Users", null, null, null));
+      // get userById
+      public static async getUserById(request: Request, response: Response, next: NextFunction) {
+        try {
+            const userId = request.params.id;
+          userService.getUserById(userId, (err: any, result: any) => {
+            if (err) {
+              next(new HttpException(400, err));
+            } else {
+              response.status(200).send(new HttpResponse(null, result, "Get Single User", null, 1, null));
+            }
+          });
         }
-      });
-    }
-    catch (err) {
-      next(new HttpException(400, "Something went wrong"));
-    }
-  }
+        catch (err) {
+          next(new HttpException(400, "Something went wrong"));
+        }
+      }
 
-  // send verification link for email
-  static async verifyEmail(request: Request, response: Response, next: NextFunction) {
-    try {
-      userService.verifyEmail((err: any, result: any) => {
-        if (err) {
-          next(new HttpException(400, err));
-        } else {
-          response.status(200).send(new HttpResponse(null, result, "Get All Users", null, null, null));
+    // updateUserById 
+      public static async updateUserById(request: Request, response: Response, next: NextFunction) {
+        try {
+            const userId = request.params.id;
+            const updatedUser = request.body;
+          userService.updateUserById(userId,updatedUser, (err: any, result: any) => {
+            if (err) {
+              next(new HttpException(400, err));
+            } else {
+              response.status(200).send(new HttpResponse(null, result, "Update User", null, 1, null));
+            }
+          });
         }
-      });
-    }
-    catch (err) {
-      next(new HttpException(400, "Something went wrong"));
-    }
-  }
+        catch (err) {
+          next(new HttpException(400, "Something went wrong"));
+        }
+      }
+
 
 }
-export default userController;
+export default userController

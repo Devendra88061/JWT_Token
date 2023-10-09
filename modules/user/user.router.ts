@@ -1,18 +1,16 @@
 import { Router } from "express";
 import userController from "./user.controller";
-import jwtToken from "../../common/db/jwt/jwt";
 
 
 const userRouter = Router();
 
-userRouter.post("/signUp", userController.signUp);
+userRouter.get("/getAllUser", userController.getAllUsers);
 
-userRouter.post("/signIn", userController.signIn);
+userRouter.get("/getUserById/:id", userController.getUserById);
 
-userRouter.get("/getUser" ,jwtToken.verifyJwt, userController.getAllUsers);
+userRouter.put("/updateUser/:id", userController.updateUserById);
 
-userRouter.post("/verifyEmail", userController.verifyEmail);
+userRouter.delete("/deleteUser/:id", userController.removeUser);
 
 
 export default userRouter;
-
