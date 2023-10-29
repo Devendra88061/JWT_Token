@@ -10,7 +10,7 @@ userRouter.get("/getUserById/:id", userController.getUserById);
 
 userRouter.put("/updateUser/:id", userController.updateUserById);
 
-userRouter.delete("/deleteUser/:id", userController.removeUser);
+userRouter.delete("/deleteUser/:id", userController.deleteUserById);
 
 
 export default userRouter;
