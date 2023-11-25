@@ -4,6 +4,7 @@ import bcrypt from "bcrypt"
 import { JWT_SECRET } from "../../config/config";
 import jwt from "jsonwebtoken";
 import sendVerificationEmail from "../../common/db/emailVerificationLink/verifyEmail";
+import sendWelcomeEmail from "../../common/db/emailVerificationLink/welcomeEmail";
 
 class authService {
 
@@ -19,9 +20,9 @@ class authService {
             const newUsers = new Users(user);
             try {
                 const result = await new CrudOperations(Users).save(newUsers)
-                // const user = result.toObject();
-                // delete user?.password;
-                // delete user.__v;
+                const email = result.email;
+                // send welcome email
+                sendWelcomeEmail(email);
                 return next(null, result);
             }
             catch (err: any) {
@@ -46,7 +47,8 @@ class authService {
                 userData = userData.toObject();
                 const token = jwt.sign(userData.email, JWT_SECRET);
                 userData.token = token;
-                return next(null, userData);
+                const userName = userData.firstName;
+                return next(null, `Hello ${userName} you are login successfully!`);
             } else {
                 return next(null, "Invalid password please re-entered correct password")
             }

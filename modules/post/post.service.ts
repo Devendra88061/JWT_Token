@@ -15,7 +15,7 @@ class postService {
             return next(err, "Something went wrong!");
         }
     }
-    
+
     // get all post
     public static async getAllPosts(next: CallableFunction) {
         try {
@@ -63,9 +63,13 @@ class postService {
     // delete post by id
     public static async deletePostById(postId: any, next: CallableFunction) {
         try {
-            const deletedPost = await new CrudOperations(Posts).getDocumentById({ _id: postId }, { isDeleted: true });
+            const deletedPost = await new CrudOperations(Posts).getDocumentById({ _id: postId }, {});
             console.log("deletedPost---", deletedPost);
-            if (deletedPost) {
+            if (deletedPost.isDeleted == true) {
+                next(null, "This post is already deleted!")
+            } else if (deletedPost) {
+                deletedPost.isDeleted = true;
+                await deletedPost.save();
                 next(null, deletedPost);
             } else {
                 next("No Post Found To Delete!");
