@@ -1,5 +1,6 @@
 import CrudOperations from "../../common/db/crud";
 import Users from "../../models/user";
+import Token from "../../models/token";
 import bcrypt from "bcrypt"
 import { JWT_SECRET } from "../../config/config";
 import jwt from "jsonwebtoken";
@@ -21,6 +22,7 @@ class authService {
             try {
                 const result = await new CrudOperations(Users).save(newUsers)
                 const email = result.email;
+
                 // send welcome email
                 sendWelcomeEmail(email);
                 return next(null, result);
@@ -48,6 +50,12 @@ class authService {
                 const token = jwt.sign(userData.email, JWT_SECRET);
                 userData.token = token;
                 const userName = userData.firstName;
+                // token data save in token collection
+                const tokenData = {
+                    userId: userData._id,
+                    token: token
+                }
+                await  new CrudOperations(Token).save(tokenData);
                 return next(null, `Hello ${userName} you are login successfully!`);
             } else {
                 return next(null, "Invalid password please re-entered correct password")

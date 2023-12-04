@@ -53,6 +53,5 @@ class authController {
       next(new HttpException(400, "Something went wrong"));
     }
   }
-
 }
 export default authController;

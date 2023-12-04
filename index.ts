@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import { MONGO_URL, PORT } from "./config/config";
 import mongoose from "mongoose";
 import router from "./modules";
-import cors from "cors"
-
+import cors from "cors";
 
 export const app = express();
 

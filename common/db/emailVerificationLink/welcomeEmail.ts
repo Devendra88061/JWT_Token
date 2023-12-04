@@ -16,13 +16,13 @@ const sendWelcomeEmail = (email:any) => {
     const mailOptions = {
       from: FROM_MAIL,
       to: email,
-      subject: 'Welcome Email',
-      html: '<p>Hello Dear:</p><img src="cid:./common/db/assets/logo.png"/>',
+      subject: 'Welcome to transport management',
+      html: '<p>Hello Dear: Welcome aboard! Were excited to have you as a valued user of Transport Management.Your journey to streamlined transport management begins now.</p><img src="cid:./common/db/assets/logo.png"/>',
     attachments: [
       {
-        filename: 'logo.png', // name of the attached image
-        path: './common/db/assets/logo.png', // path to the image file
-        cid: 'unique-image-id' // same as in the html img src
+        filename: 'logo.png',
+        path: './common/db/assets/logo.png',
+        cid: 'unique-image-id'
       }
     ]
     };
