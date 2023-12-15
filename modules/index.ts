@@ -13,5 +13,4 @@ router.use("/user", userRouter);
 
 router.use("/post", postRouter);
 
-
 export default router;
